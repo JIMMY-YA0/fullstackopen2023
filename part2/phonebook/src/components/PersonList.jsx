@@ -1,13 +1,27 @@
 import React from "react";
+import personService from "../services/persons";
 
-const PersonList = ({ persons }) => {
+const PersonList = ({ persons, setPersons }) => {
+  const handleRemove = (person) => {
+    const personID = person.id;
+    const confirmRemove = window.confirm(
+      `Are you sure you want to delete ${person.name} from the phonebook?`
+    );
+    if (confirmRemove) {
+      personService.remove(personID).then((response) => {
+        setPersons(persons.filter((person) => person.id !== personID));
+        return response;
+      });
+    }
+  };
   return (
     <>
       {persons.map((person) => (
         <div>
           {" "}
           <p key={person.name}>
-            {person.name} {person.number} <button>Delete</button>
+            {person.name} {person.number}
+            <button onClick={() => handleRemove(person)}>Delete</button>
           </p>
         </div>
       ))}

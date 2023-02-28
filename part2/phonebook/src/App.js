@@ -60,7 +60,7 @@ const App = () => {
       {searchTerm ? (
         <Filter persons={persons} searchTerm={searchTerm} />
       ) : (
-        <PersonList persons={persons} />
+        <PersonList persons={persons} setPersons={setPersons} />
       )}
     </div>
   );
