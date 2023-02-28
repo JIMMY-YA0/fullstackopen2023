@@ -10,37 +10,14 @@ import personService from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     personService.getAll().then((initialPerson) => {
       setPersons(initialPerson);
     });
-  }, [persons]);
+  }, []);
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-    if (persons.some((person) => person.name === newName.trim())) {
-      alert(`${newName} is already added to phonbook`);
-    } else {
-      const personObject = {
-        name: newName,
-        number: newNumber,
-      };
-      personService
-        .create(personObject)
-        .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
-      setNewName("");
-    }
-  };
-  const nameInput = (event) => {
-    setNewName(event.target.value);
-  };
-  const numberInput = (event) => {
-    setNewNumber(event.target.value);
-  };
   const serachInput = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -48,14 +25,7 @@ const App = () => {
   return (
     <div>
       <Search searchTerm={searchTerm} serachInput={serachInput} />
-      <AddPerson
-        submitHandler={submitHandler}
-        newName={newName}
-        nameInput={nameInput}
-        newNumber={newNumber}
-        numberInput={numberInput}
-      />
-
+      <AddPerson persons={persons} setPersons={setPersons} />
       <h2>Numbers</h2>
       {searchTerm ? (
         <Filter persons={persons} searchTerm={searchTerm} />

@@ -17,9 +17,8 @@ const PersonList = ({ persons, setPersons }) => {
   return (
     <>
       {persons.map((person) => (
-        <div>
-          {" "}
-          <p key={person.name}>
+        <div key={person.name}>
+          <p>
             {person.name} {person.number}
             <button onClick={() => handleRemove(person)}>Delete</button>
           </p>
