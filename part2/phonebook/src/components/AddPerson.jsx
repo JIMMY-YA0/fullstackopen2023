@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import personService from "../services/persons";
-const AddPerson = ({ persons, setPersons }) => {
+const AddPerson = ({ persons, setPersons, setMessage }) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const submitHandler = (event) => {
     event.preventDefault();
+
     const existPerson = persons.find(
       (person) => person.name.toLocaleLowerCase() === newName.trim().toLocaleLowerCase()
     );
@@ -15,11 +16,20 @@ const AddPerson = ({ persons, setPersons }) => {
         `${newName} is already added to phonebook, replace the old number with a new one?`
       );
       if (confirmReplace) {
-        personService.update(existPerson.id, newObject).then((returnedPerson) => {
-          setPersons(
-            persons.map((person) => (person.id !== existPerson.id ? person : returnedPerson))
-          );
-        });
+        personService
+          .update(existPerson.id, newObject)
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((person) => (person.id !== existPerson.id ? person : returnedPerson))
+            );
+          })
+          .catch((error) => {
+            setMessage(`${existPerson.name} has already been removed from phonbook.`);
+          });
+        setMessage(`${newObject.name}'s phone number: ${newObject.number} has been updated.`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       }
     } else {
       //create
@@ -29,9 +39,16 @@ const AddPerson = ({ persons, setPersons }) => {
       };
       personService
         .create(personObject)
-        .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+        })
+        .catch((error) => setMessage("Failed to create"));
       setNewName("");
       setNewNumber("");
+      setMessage(`${personObject.name} with number: ${personObject.number} has been added.`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
     }
   };
 

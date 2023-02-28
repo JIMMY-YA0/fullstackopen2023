@@ -5,18 +5,22 @@ import Filter from "./components/Filter";
 import PersonList from "./components/PersonList";
 import { useEffect } from "react";
 import personService from "./services/persons";
+import Notification from "./components/Notification";
 
 // import axios from "axios";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [message, setMessage] = useState(null);
 
-  useEffect(() => {
+  const hook = () => {
     personService.getAll().then((initialPerson) => {
       setPersons(initialPerson);
     });
-  }, []);
+  };
+
+  useEffect(hook, []);
 
   const serachInput = (event) => {
     setSearchTerm(event.target.value);
@@ -24,13 +28,14 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} />
       <Search searchTerm={searchTerm} serachInput={serachInput} />
-      <AddPerson persons={persons} setPersons={setPersons} />
-      <h2>Numbers</h2>
+      <AddPerson persons={persons} setPersons={setPersons} setMessage={setMessage} />
+      <h1>Numbers</h1>
       {searchTerm ? (
         <Filter persons={persons} searchTerm={searchTerm} />
       ) : (
-        <PersonList persons={persons} setPersons={setPersons} />
+        <PersonList persons={persons} setPersons={setPersons} setMessage={setMessage} />
       )}
     </div>
   );

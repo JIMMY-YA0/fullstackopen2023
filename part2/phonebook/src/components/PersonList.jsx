@@ -8,10 +8,13 @@ const PersonList = ({ persons, setPersons }) => {
       `Are you sure you want to delete ${person.name} from the phonebook?`
     );
     if (confirmRemove) {
-      personService.remove(personID).then((response) => {
-        setPersons(persons.filter((person) => person.id !== personID));
-        return response;
-      });
+      personService
+        .remove(personID)
+        .then((response) => {
+          setPersons(persons.filter((person) => person.id !== personID));
+          return response;
+        })
+        .catch((error) => console.log(error));
     }
   };
   return (
