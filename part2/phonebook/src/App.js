@@ -4,7 +4,9 @@ import AddPerson from "./components/AddPerson";
 import Filter from "./components/Filter";
 import PersonList from "./components/PersonList";
 import { useEffect } from "react";
-import axios from "axios";
+import personService from "./services/persons";
+
+// import axios from "axios";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -13,15 +15,23 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => setPersons(response.data));
-  }, []);
+    personService.getAll().then((initialPerson) => {
+      setPersons(initialPerson);
+    });
+  }, [persons]);
 
   const submitHandler = (event) => {
     event.preventDefault();
     if (persons.some((person) => person.name === newName.trim())) {
       alert(`${newName} is already added to phonbook`);
     } else {
-      setPersons([...persons, { name: newName, number: newNumber }]);
+      const personObject = {
+        name: newName,
+        number: newNumber,
+      };
+      personService
+        .create(personObject)
+        .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
       setNewName("");
     }
   };
