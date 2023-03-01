@@ -1,7 +1,13 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 
 app.use(express.json());
+
+morgan.token("req-data", (req, res) => {
+  return JSON.stringify(req.body);
+});
+app.use(morgan(":method :url :status :res[content-length] :req-data - :response-time ms"));
 
 let personData = [
   {
@@ -62,7 +68,7 @@ const generatedId = () => {
 
 app.post("/api/person", (req, res) => {
   const body = req.body;
-  console.log("log", body);
+
   const existName = personData.find(
     (person) => person.name.toLowerCase() === body.name.trim().toLowerCase()
   );
