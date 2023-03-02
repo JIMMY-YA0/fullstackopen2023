@@ -1,4 +1,4 @@
-const Person = require("../models/personModel");
+const Person = require('../models/personModel');
 
 // GET all People data
 const getAllPerson = async (req, res) => {
@@ -10,12 +10,12 @@ const getAllPerson = async (req, res) => {
       }
     );
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: person,
     });
   } catch (err) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: err.message,
     });
   }
@@ -32,15 +32,15 @@ const getOnePerson = async (req, res) => {
     });
     if (person) {
       res.status(200).json({
-        status: "success",
+        status: 'success',
         data: person,
       });
     } else {
-      res.status(404).json({ error: "Person Not Found" });
+      res.status(404).json({ error: 'Person Not Found' });
     }
   } catch (err) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: err.message,
     });
   }
@@ -55,7 +55,7 @@ const addNewPerson = async (req, res) => {
       number,
     });
     res.status(201).json({
-      status: "success",
+      status: 'success',
       data: newPerson,
     });
   } catch (err) {
@@ -67,14 +67,14 @@ const addNewPerson = async (req, res) => {
 const deletePerson = async (req, res) => {
   const id = req.params.id;
   try {
-    const person = await Person.findByIdAndRemove(id);
+    await Person.findByIdAndRemove(id);
     res.status(204).json({
-      status: "success",
+      status: 'success',
       data: null,
     });
   } catch (err) {
     res.status(404).json({
-      status: "fail",
+      status: 'fail',
       message: err.message,
     });
   }
@@ -88,15 +88,15 @@ const updatePerson = async (req, res) => {
     const person = await Person.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
-      context: "query",
+      context: 'query',
     });
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: person,
     });
   } catch (err) {
     res.status(404).json({
-      status: "fail",
+      status: 'fail',
       message: err.message,
     });
   }
