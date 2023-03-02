@@ -85,7 +85,11 @@ const updatePerson = async (req, res) => {
   const id = req.params.id;
   try {
     // new: If true, return the modified document rather than the original. Defaults to false.
-    const person = await Person.findByIdAndUpdate(id, req.body, { new: true });
+    const person = await Person.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+      context: "query",
+    });
     res.status(200).json({
       status: "success",
       data: person,

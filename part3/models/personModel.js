@@ -4,12 +4,18 @@ const personSchema = new mongoose.Schema({
     type: String,
     unique: true,
     trim: true,
-    require: true,
+    minLength: [3, "Name must habe at least 8 length"],
+    required: [true, "Name field is required"],
   },
   number: {
     type: String,
     unique: true,
-    require: true,
+    minLength: [8, "Number must habe at least 8 length"],
+    required: [true, "Number field is required"],
+    validate: {
+      validator: (number) => /^\d{2,3}-\d+$/.test(number),
+      message: "Phone number should be in the format of XX-XXXXXXXXX or XXX-XXXXXXXXX.",
+    },
   },
 });
 

@@ -45,7 +45,7 @@ const AddPerson = ({ persons, setPersons, setMessage }) => {
         .then((returnedPerson) => {
           setPersons(persons.concat(returnedPerson.data));
         })
-        .catch((error) => setMessage("Failed to create"));
+        .catch((err) => setMessage(err.response.data.error));
       setNewName("");
       setNewNumber("");
       setMessage(`${personObject.name} with number: ${personObject.number} has been added.`);
