@@ -1,11 +1,17 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const connectDB = require("./mongo");
+const personRoute = require("./routes/personRoutes");
+const { errorHandler } = require("./utils/errorHandler");
+const { unknownEndpoint } = require("./utils/unknownEndPoint");
+
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 app.use(express.static("build"));
+
 morgan.token("req-data", (req, res) => {
   return JSON.stringify(req.body);
 });
@@ -38,9 +44,9 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.get("/api/person", (req, res) => {
-  res.json(personData);
-});
+// app.get("/*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "build", "index.html"));
+// });
 
 app.get("/info", (req, res) => {
   const totalEntries = personData.length;
@@ -48,49 +54,34 @@ app.get("/info", (req, res) => {
   res.send(`Phonebook has info for ${totalEntries} people <br/> ${time}`);
 });
 
-app.get("/api/person/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const existPerson = personData.find((person) => person.id === id);
-  if (existPerson) {
-    res.json(existPerson);
-  } else {
-    res.status(404).end();
-  }
-});
+// app.get("/api/person/:id", (req, res) => {
+//   const id = Number(req.params.id);
+//   const existPerson = personData.find((person) => person.id === id);
+//   if (existPerson) {
+//     res.json(existPerson);
+//   } else {
+//     res.status(404).end();
+//   }
+// });
 
-app.delete("/api/person/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const newPersonData = personData.filter((person) => person.id !== id);
-  res.status(204).end();
-});
+// app.delete("/api/person/:id", (req, res) => {
+//   const id = Number(req.params.id);
+//   const newPersonData = personData.filter((person) => person.id !== id);
+//   res.status(204).end();
+// });
 
-const generatedId = () => {
-  return Math.floor(Math.random() * 30000);
+app.use("/api", personRoute);
+
+//errorHandler must be the end of middleware
+app.use(unknownEndpoint);
+app.use(errorHandler);
+const PORT = process.env.PORT || 3001;
+
+const startServer = async () => {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Server is run on Port: ${PORT}`);
+  });
 };
 
-app.post("/api/person", (req, res) => {
-  const body = req.body;
-
-  const existName = personData.find(
-    (person) => person.name.toLowerCase() === body.name.trim().toLowerCase()
-  );
-  if (!body.name || !body.number) {
-    return res.status(400).json({ error: "The name or number is missing" });
-  } else if (existName) {
-    return res.status(400).json({ error: "Name must be unique" });
-  }
-
-  const newPerson = {
-    id: generatedId(),
-    name: body.name,
-    number: body.number,
-  };
-
-  persons = personData.concat(newPerson);
-  res.json(persons);
-});
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server is run on Port: ${PORT}`);
-});
+startServer();

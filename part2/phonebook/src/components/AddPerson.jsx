@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import personService from "../services/persons";
+
 const AddPerson = ({ persons, setPersons, setMessage }) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
@@ -17,10 +18,12 @@ const AddPerson = ({ persons, setPersons, setMessage }) => {
       );
       if (confirmReplace) {
         personService
-          .update(existPerson.id, newObject)
+          .update(existPerson._id, newObject)
           .then((returnedPerson) => {
             setPersons(
-              persons.map((person) => (person.id !== existPerson.id ? person : returnedPerson))
+              persons.map((person) =>
+                person._id !== existPerson._id ? person : returnedPerson.data
+              )
             );
           })
           .catch((error) => {
@@ -40,7 +43,7 @@ const AddPerson = ({ persons, setPersons, setMessage }) => {
       personService
         .create(personObject)
         .then((returnedPerson) => {
-          setPersons(persons.concat(returnedPerson));
+          setPersons(persons.concat(returnedPerson.data));
         })
         .catch((error) => setMessage("Failed to create"));
       setNewName("");

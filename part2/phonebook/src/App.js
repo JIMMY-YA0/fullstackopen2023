@@ -16,7 +16,7 @@ const App = () => {
 
   const hook = () => {
     personService.getAll().then((initialPerson) => {
-      setPersons(initialPerson);
+      setPersons(initialPerson.data);
     });
   };
 

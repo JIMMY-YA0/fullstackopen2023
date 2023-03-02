@@ -2,8 +2,9 @@ import React from "react";
 import personService from "../services/persons";
 
 const PersonList = ({ persons, setPersons }) => {
+  console.log("id", persons);
   const handleRemove = (person) => {
-    const personID = person.id;
+    const personID = person._id;
     const confirmRemove = window.confirm(
       `Are you sure you want to delete ${person.name} from the phonebook?`
     );
@@ -11,8 +12,8 @@ const PersonList = ({ persons, setPersons }) => {
       personService
         .remove(personID)
         .then((response) => {
-          setPersons(persons.filter((person) => person.id !== personID));
-          return response;
+          setPersons(persons.filter((person) => person._id !== personID));
+          return response.data;
         })
         .catch((error) => console.log(error));
     }
@@ -20,7 +21,7 @@ const PersonList = ({ persons, setPersons }) => {
   return (
     <>
       {persons.map((person) => (
-        <div key={person.name}>
+        <div key={person._id}>
           <p>
             {person.name} {person.number}
             <button onClick={() => handleRemove(person)}>Delete</button>
