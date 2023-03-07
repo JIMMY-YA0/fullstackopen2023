@@ -17,5 +17,6 @@ module.exports = {
     eqeqeq: 'error',
     'arrow-spacing': ['error', { before: true, after: true }],
     'no-console': 0,
+    jest: true,
   },
 };
