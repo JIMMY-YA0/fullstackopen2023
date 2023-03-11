@@ -43,6 +43,10 @@ const postNewBlog = async (req, res) => {
       likes: likes || 0,
       user: user._id,
     });
+    //update the user's blogs array with the new blog's id
+    user.blogs = user.blogs.concat(newBlog._id);
+    await req.user.save();
+
     res.status(201).json({
       status: 'success',
       data: newBlog,
