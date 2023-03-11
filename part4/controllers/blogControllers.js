@@ -63,21 +63,14 @@ const deleteBlog = async (req, res) => {
     try {
       await Blog.findByIdAndRemove(blogId);
       res.status(204).end();
-    } catch (error) {
-      res.status(403).json({ error: 'user not authorized to delete blog' });
+    } catch (err) {
+      res.status(403).json({
+        status: 'fail',
+        message: { error: err.message },
+      });
     }
-  }
-  try {
-    await Blog.findByIdAndRemove(blogId);
-    res.status(204).json({
-      status: 'success',
-      data: null,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err.message,
-    });
+  } else {
+    return response.status(401).json({ error: `Unauthorized` });
   }
 };
 
