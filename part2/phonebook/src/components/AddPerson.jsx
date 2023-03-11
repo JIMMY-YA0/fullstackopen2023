@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import personService from "../services/persons";
+import React, { useState } from 'react';
+import personService from '../services/persons';
 
 const AddPerson = ({ persons, setPersons, setMessage }) => {
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
   const submitHandler = (event) => {
     event.preventDefault();
 
@@ -46,8 +46,8 @@ const AddPerson = ({ persons, setPersons, setMessage }) => {
           setPersons(persons.concat(returnedPerson.data));
         })
         .catch((err) => setMessage(err.response.data.error));
-      setNewName("");
-      setNewNumber("");
+      setNewName('');
+      setNewNumber('');
       setMessage(`${personObject.name} with number: ${personObject.number} has been added.`);
       setTimeout(() => {
         setMessage(null);
@@ -73,7 +73,7 @@ const AddPerson = ({ persons, setPersons, setMessage }) => {
           number: <input value={newNumber} onChange={numberInput} />
         </div>
         <div>
-          <button type="submit">add</button>
+          <button type="submit">add11</button>
         </div>
       </form>
     </>

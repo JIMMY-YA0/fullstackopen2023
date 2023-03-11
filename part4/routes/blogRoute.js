@@ -1,7 +1,15 @@
 const express = require('express');
-const router = express.Router();
-const { getAllblogs, postNewBlog } = require('../controllers/blogControllers');
+const BlogRouter = express.Router();
+const { userExtractor } = require('../middleware/middleware');
+const {
+  getAllblogs,
+  getBlogById,
+  postNewBlog,
+  deleteBlog,
+  updateBlog,
+} = require('../controllers/blogControllers');
 
-router.route('/blogs').get(getAllblogs).post(postNewBlog);
+BlogRouter.route('/').get(getAllblogs).post(userExtractor, postNewBlog);
+BlogRouter.route('/:id').get(getBlogById).delete(userExtractor, deleteBlog).patch(updateBlog);
 
-module.exports = router;
+module.exports = BlogRouter;
