@@ -10,6 +10,6 @@ const {
 } = require('../controllers/blogControllers');
 
 BlogRouter.route('/').get(getAllblogs).post(userExtractor, postNewBlog);
-BlogRouter.route('/:id').get(getBlogById).delete(userExtractor, deleteBlog).patch(updateBlog);
+BlogRouter.route('/:id').get(getBlogById).delete(userExtractor, deleteBlog).put(updateBlog);
 
 module.exports = BlogRouter;

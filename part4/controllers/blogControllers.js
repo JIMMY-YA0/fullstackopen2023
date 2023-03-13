@@ -3,6 +3,8 @@ const Blog = require('../models/blogModel');
 const getAllblogs = async (req, res) => {
   try {
     const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
+
+    // res.status(200).json(blogs)
     res.status(200).json({
       status: 'success',
       data: blogs,
@@ -45,7 +47,7 @@ const postNewBlog = async (req, res) => {
     });
     //update the user's blogs array with the new blog's id
     user.blogs = user.blogs.concat(newBlog._id);
-    await req.user.save();
+    await user.save();
 
     res.status(201).json({
       status: 'success',
@@ -80,16 +82,23 @@ const deleteBlog = async (req, res) => {
 
 const updateBlog = async (req, res) => {
   const blogId = req.params.id;
+  const { title, author, url, likes, user } = req.body;
   try {
-    const updatedBlog = await Blog.findByIdAndUpdate(blogId, req.body, {
-      new: true,
-      runValidators: true,
-      context: 'query',
-    });
+    let updatedBlog = await Blog.findByIdAndUpdate(
+      blogId,
+      { title, author, url, likes, user },
+      {
+        new: true,
+        runValidators: true,
+        context: 'query',
+      }
+    );
+    updatedBlog = await Blog.findById(updatedBlog._id).populate('user');
     res.status(200).json({
       status: 'success',
       data: updatedBlog,
     });
+    // res.status(200).json(updatedBlog);
   } catch (error) {
     res.status(404).json({
       status: 'fail',
