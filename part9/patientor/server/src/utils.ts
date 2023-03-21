@@ -9,7 +9,6 @@ const parseString = (text: unknown): string => {
   if (!text || !isString(text)) {
     throw new Error(`Incorrect or missing input: ${text}`)
   }
-
   return text
 }
 
@@ -67,32 +66,12 @@ const toNewPatientEntry = (object: unknown): NewPatientEntry => {
       dateOfBirth: parseDate(object.dateOfBirth),
       ssn: parseSsn(object.ssn),
       gender: parseGender(object.gender),
-      occupation: parseOccupation(object.occupation)
+      occupation: parseOccupation(object.occupation),
+      entries: []
     }
     return newEntry
   }
   throw new Error('Incorrect data: a field missing')
 }
-
-// const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
-//   if (!object || typeof object !== 'object') {
-//     throw new Error('Incorrect or missing data')
-//   }
-
-//   if ('comment' in object && 'date' in object && 'weather' in object && 'visibility' in object) {
-//     const newEntry: NewDiaryEntry = {
-//       weather: parseWeather(object.weather),
-//       visibility: parseVisibility(object.visibility),
-//       date: parseDate(object.date),
-//       comment: parseComment(object.comment)
-//     }
-
-//     return newEntry
-//   }
-
-//   throw new Error('Incorrect data: some fields are missing')
-// }
-
-//patients
 
 export default toNewPatientEntry
