@@ -1,5 +1,4 @@
-import { Gender } from './../../patientor/src/types'
-import { NewPatientEntry } from './types'
+import { Gender, NewPatientEntry } from './types'
 
 //type predicate based type guard
 const isString = (text: unknown): text is string => {
