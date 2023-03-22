@@ -1,3 +1,4 @@
+import { EntryWithoutId } from './../types'
 import { v4 as uuidv4 } from 'uuid'
 import patient_data from '../../data/patients'
 
@@ -17,16 +18,29 @@ const getPatientById = (id: string): Patient | undefined => {
   return patient_data.find((patient) => patient.id === id)
 }
 
-const addPatient = (entry: NewPatient): Patient => {
+const addPatient = (patient: NewPatient): Patient => {
   const newPatientEntry = {
     id: uuidv4(),
-    ...entry
+    ...patient
   }
   return newPatientEntry
+}
+
+const addEntry = (id: string, newEntry: EntryWithoutId): Patient | undefined => {
+  const patient = patient_data.find((p) => p.id === id)
+  if (patient) {
+    const entry = {
+      ...newEntry,
+      id: uuidv4()
+    }
+    patient.entries = patient.entries.concat(entry)
+  }
+  return patient
 }
 
 export default {
   getPatientEntry,
   getPatientById,
-  addPatient
+  addPatient,
+  addEntry
 }
