@@ -1,8 +1,7 @@
-import { EntryWithoutId } from './../types'
 import { v4 as uuidv4 } from 'uuid'
 import patient_data from '../../data/patients'
 
-import { NonSensitivePatient, Patient, NewPatient } from '../types'
+import { NonSensitivePatient, Patient, NewPatient, EntryWithoutId } from '../types'
 
 const getPatientEntry = (): NonSensitivePatient[] => {
   return patient_data.map(({ id, name, dateOfBirth, gender, occupation }) => ({
@@ -20,8 +19,8 @@ const getPatientById = (id: string): Patient | undefined => {
 
 const addPatient = (patient: NewPatient): Patient => {
   const newPatientEntry = {
-    id: uuidv4(),
-    ...patient
+    ...patient,
+    id: uuidv4()
   }
   return newPatientEntry
 }
