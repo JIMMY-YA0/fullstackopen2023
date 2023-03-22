@@ -1,6 +1,7 @@
 import React from 'react'
 import { Diagnosis, Entry } from '../../types'
 import { Work, MedicalServices, LocalHospital } from '@mui/icons-material'
+import EntryDetails from './EntryDetails'
 
 interface EntryInfoProps {
   entry: Entry
@@ -30,6 +31,7 @@ const EntryInfo = ({ entry, diagnoses }: EntryInfoProps) => {
   return (
     <div>
       {entry.date} {entry.description} {typeIcon(entry.type)}
+      <EntryDetails entry={entry} />
       <ul>
         {entry.diagnosisCodes?.map((code) => (
           <li key={code}>
