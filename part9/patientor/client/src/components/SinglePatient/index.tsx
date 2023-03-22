@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Male, Female, QuestionMark } from '@mui/icons-material'
 import patientService from '../../services/patients'
 import { Gender, Patient } from '../../types'
+import EntryInfo from './EntryInfo'
 
 const SinglePatient = () => {
   const [patient, setPatient] = useState<Patient | null>(null)
@@ -26,6 +27,7 @@ const SinglePatient = () => {
         try {
           const response = await patientService.getOne(id)
           setPatient(response)
+          console.log('singlepatient', response)
         } catch (error) {
           console.error(error)
         }
@@ -33,6 +35,7 @@ const SinglePatient = () => {
       void fetchData()
     }
   }, [id])
+
   if (!patient) {
     return <p>Loading...</p>
   }
@@ -44,6 +47,10 @@ const SinglePatient = () => {
       </h3>
       <div>ssn {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
+      <h4>Entries</h4>
+      {patient.entries?.map((entry) => (
+        <EntryInfo key={entry.id} entry={entry} />
+      ))}
     </div>
   )
 }
